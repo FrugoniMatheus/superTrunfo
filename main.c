@@ -4,6 +4,10 @@
 #include <time.h>
 #include <stdbool.h>
 #define MAX_CART 3
+//INCLUDE CARTACACHORRO 
+// Classes 
+//FIlter by
+
 
 
 typedef struct {
@@ -36,9 +40,14 @@ void introducaoJogo(){
   printf("|__________________________________________________________|\n");
 }
 
+void imprimirLinhaDupla(int v1){
+  int i = 0; 
+  for(i = 0; i < v1; i++) printf("=");
+}
 
 void comoJogar(){
-  printf("------------------------------------------------------------\n");
+  imprimirLinhaDupla(100);
+  printf("\n------------------------------------------------------------\n");
   printf("|Como jogar:                                               |\n");
   printf("|1- O jogador que inicia sera sorteado aleatoriamente ele  |\n");
   printf("|precisa pegar a sua primeira carta do seu monte escolher  |\n");
@@ -67,8 +76,86 @@ void limparTela(){
   system("cls");
 }
 
-int main(){
+void escolhaAtributos(int **atributo){
+  printf("|-------------------------------|\n");
+  printf("|  Atributos para escolher:     |\n");
+  printf("|  0 - Brincalhao               |\n");
+  printf("|  1 - Peso                     |\n");
+  printf("|  2 - Agressividade            |\n");
+  printf("|  3 - Agilidade                |\n");
+  printf("|  4 - Obediencia               |\n");
+  printf("|_______________________________|\n\n");
+  printf("Atributo escolhido: ");
+  scanf( "%d", &**atributo);
+}
 
+void impressaoAtributoInteiro(char atributo[50], int v1, int v2){
+  printf("Jogador escolheu o atributo : %s\n", atributo);
+          printf("--------------------------------------------------\n");
+          printf("|   cartas Adversario     |   Sua carta          |\n");
+          printf("|      %s : %d        |   %s : %d     |\n",
+          atributo,v1, atributo, v2 );
+          printf("|_________________________|______________________|\n\n");
+}
+
+void impressaoAtributoFloat(char atributo[50],float v1, float v2){
+  printf("Jogador escolheu o atributo : %s\n", atributo);
+  printf("--------------------------------------------------\n");
+  printf("|   cartas Adversario     |   Sua carta          |\n");
+  printf("|         %s : %.1f      |     %s : %.1f      |\n",atributo,v1, 
+    atributo, v2 );
+    printf("|_________________________|______________________|\n\n");
+}
+
+void impressaoEscolhaAtributo(JogadorCartas jogadorAtributo[], int atributo){
+  switch(atributo){
+    case 0: 
+      impressaoAtributoInteiro("Brincalhao",jogadorAtributo[0].cartas[0].brincalhao,
+        jogadorAtributo[1].cartas[0].brincalhao);
+      break;
+    case 1:
+      impressaoAtributoFloat("Peso",jogadorAtributo[0].cartas[0].peso,
+        jogadorAtributo[1].cartas[0].peso);
+      break;
+    case 2:
+      impressaoAtributoInteiro("Agressividade",jogadorAtributo[0].cartas[0].agressividade,
+        jogadorAtributo[1].cartas[0].agressividade);
+      break;
+    case 3: 
+      impressaoAtributoInteiro("Agilidade",jogadorAtributo[0].cartas[0].agilidade,
+        jogadorAtributo[1].cartas[0].agilidade );
+      break;
+    case 4:
+      impressaoAtributoInteiro("obediencia" ,jogadorAtributo[0].cartas[0].obediencia,
+        jogadorAtributo[1].cartas[0].obediencia);
+      break;
+
+      default:
+        printf("Erro atributo para o BOT\n");
+        break;
+  }
+}
+
+void jogadorAcaoAtributo(int *atributo, JogadorCartas jogCar[]){
+  escolhaAtributos(&atributo);
+  printf("---------------------------------------------\n");
+  impressaoEscolhaAtributo(jogCar, *atributo);
+  printf("---------------------------------------------\n");
+}
+
+void imprimirCartaInteira(JogadorCartas jogador[], int nJogador){
+  printf("Dados da carta que possui: \n");
+  printf("----------------------\n");
+  printf("| Nome carta: %s  |\n", jogador[nJogador].cartas[0].nome);
+  printf("|  Brincalhao: %d    |\n", jogador[nJogador].cartas[0].brincalhao);
+  printf("|  Peso: %.1f       |\n",jogador[nJogador].cartas[0].peso);
+  printf("|  Agressividade: %d |\n",jogador[nJogador].cartas[0].agressividade);
+  printf("|  Agilidade: %d     |\n",jogador[nJogador].cartas[0].agilidade);
+  printf("|  Obediencia: %d    |\n",jogador[nJogador].cartas[0].obediencia);
+  printf("|___________________|\n\n");  
+}
+
+  int main(){
 
   // ----------Inicio criação Carta---------------------------------//
   CartaCachorro cc[7];
@@ -132,7 +219,8 @@ int main(){
 
 
   // ----------Inicio criação Jogador---------------------------------//
-  
+  //FILTRER BY
+  //  
 
   JogadorCartas jc[1];
   strcpy(jc[0].nome,"Robo");
@@ -191,61 +279,18 @@ int main(){
     //----Rodada Jogador IA. ---------------------------
     limparTela();
     
-
     if (strcmp(nomeGanhador, jc[0].nome) == 0){
 
       printf("--------------------------------------------\n");
       printf("Jogador da vez: %s\n", jc[0].nome);
 
       gerarNumeroAleatorio(&atributoRandomico, 5);
-      switch(atributoRandomico){
-        case 0: 
-          printf("Jogador escolheu o atributo : Brincalhao\n");
-          printf("--------------------------------------------------\n");
-          printf("|   cartas Adversario     |   Sua carta          |\n");
-          printf("|   Brincalhao : %d        |   Brincalhao : %d     |\n",
-          jc[0].cartas[0].brincalhao,jc[1].cartas[0].brincalhao );
-          printf("|_________________________|______________________|\n\n");
-          break;
-        case 1:
-          printf("Jogador escolheu o atributo : Peso\n");
-          printf("--------------------------------------------------\n");
-          printf("|   cartas Adversario     |   Sua carta          |\n");
-          printf("|         Peso : %.1f      |     Peso : %.1f      |\n",
-            jc[0].cartas[0].peso,jc[1].cartas[0].peso );
-            printf("|_________________________|______________________|\n\n");
-          break;
-        case 2:
-          printf("Jogador escolheu o atributo : Agressividade\n");
-          printf("--------------------------------------------------\n");
-          printf("|   cartas Adversario     |   Sua carta          |\n");
-          printf("|     Agressividade : %d   |   Agressividade: %d   |\n",
-            jc[0].cartas[0].agressividade,jc[1].cartas[0].agressividade );
-            printf("|_________________________|______________________|\n\n");
-          break;
-        case 3: 
-          printf("Jogador escolheu o atributo : Agilidade\n");
-          printf("--------------------------------------------------\n");
-          printf("|   cartas Adversario     |   Sua carta          |\n");
-          printf("|   Agilidade : %d         |   Agilidade : %d      |\n",
-            jc[0].cartas[0].agilidade,jc[1].cartas[0].agilidade );
-            printf("|_________________________|______________________|\n\n");
-          break;
-        case 4:
-          printf("Jogador escolheu o atributo : Obediencia\n");
-          printf("--------------------------------------------------\n");
-          printf("|   cartas Adversario     |   Sua carta          |\n");
-          printf("|   Obediencia : %d        |   Obediencia : %d     |\n",
-            jc[0].cartas[0].obediencia,jc[1].cartas[0].obediencia );
-            printf("|_________________________|______________________|\n\n");
-          break;
 
-          default:
-            printf("Erro atributo para o BOT\n");
-            break;
-      }// Fim Mensagem Atributo Escolhido
+      impressaoEscolhaAtributo(jc, atributoRandomico);
+
       atributoEscolhido = atributoRandomico;
-    }//---- Fim Rodada Jogador IA--------------------------- 
+    }
+
     //---Inicio Rodada Player---------------------------
     else if (strcmp(nomeGanhador, jc[1].nome) == 0){
       //----Mensagem Vez Player
@@ -264,29 +309,11 @@ int main(){
       //---Ação Player
       if(acaoJogador == 0){
         printf("\n");
-        printf("Dados da carta que possui: \n");
-        printf("----------------------\n");
-        printf("| Nome carta: %s  |\n", jc[1].cartas[0].nome);
-        printf("|  Brincalhao: %d    |\n", jc[1].cartas[0].brincalhao);
-        printf("|  Peso: %.1f       |\n",jc[1].cartas[0].peso);
-        printf("|  Agressividade: %d |\n",jc[1].cartas[0].agressividade);
-        printf("|  Agilidade: %d     |\n",jc[1].cartas[0].agilidade);
-        printf("|  Obediencia: %d    |\n",jc[1].cartas[0].obediencia);
-        printf("|___________________|\n\n");
+        imprimirCartaInteira(jc, 1);
         goto retornoAcaoJogador;  
       }
       else if(acaoJogador == 1){
-        printf("|-------------------------------|\n");
-        printf("|  Atributos para escolher:     |\n");
-        printf("|  0 - Brincalhao               |\n");
-        printf("|  1 - Peso                     |\n");
-        printf("|  2 - Agressividade            |\n");
-        printf("|  3 - Agilidade                |\n");
-        printf("|  4 - Obediencia               |\n");
-        printf("|_______________________________|\n\n");
-        printf("Atributo escolhido: ");
-        scanf("%d", &atributoEscolhido);
-        printf("---------------------------------------------\n");
+        jogadorAcaoAtributo(&atributoEscolhido, jc);
       } 
       else if(acaoJogador == 2){
         printf("\n");
